@@ -17,16 +17,28 @@ export default function QueryProcessor(query: string): string {
 
   const arithmeticOps = ["plus", "minus", "multiplied by", "divided by"];
   if (arithmeticOps.some((op) => query.toLowerCase().includes(op)) && !query.toLowerCase().includes("remainder")) {
-    const tokens = query.match(/\d+|multiplied by|divided by|plus|minus/gi) || [];
-    if (tokens.length >= 1) {
-      let result = Number(tokens[0]);
-      for (let i = 1; i + 1 < tokens.length; i += 2) {
-        const op = tokens[i].toLowerCase();
-        const operand = Number(tokens[i + 1]);
-        if (op === "plus") result += operand;
-        else if (op === "minus") result -= operand;
-        else if (op === "multiplied by") result *= operand;
-        else if (op === "divided by") result /= operand;
+    const rawTokens = query.match(/\d+|multiplied by|divided by|plus|minus/gi) || [];
+    if (rawTokens.length >= 1) {
+      const nums = rawTokens.filter((t) => /^\d+$/.test(t)).map(Number);
+      const ops = rawTokens.filter((t) => !/^\d+$/.test(t)).map((t) => t.toLowerCase());
+
+      // First pass: multiplication and division (PEMDAS)
+      let i = 0;
+      while (i < ops.length) {
+        if (ops[i] === "multiplied by" || ops[i] === "divided by") {
+          const val = ops[i] === "multiplied by" ? nums[i] * nums[i + 1] : nums[i] / nums[i + 1];
+          nums.splice(i, 2, val);
+          ops.splice(i, 1);
+        } else {
+          i++;
+        }
+      }
+
+      // Second pass: addition and subtraction
+      let result = nums[0];
+      for (let j = 0; j < ops.length; j++) {
+        if (ops[j] === "plus") result += nums[j + 1];
+        else if (ops[j] === "minus") result -= nums[j + 1];
       }
       return String(result);
     }
