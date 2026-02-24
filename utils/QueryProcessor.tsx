@@ -15,29 +15,49 @@ export default function QueryProcessor(query: string): string {
     return "kevindai";
   }
 
-  const plusMatch = query.match(/what is (\d+) plus (\d+)/i);
-  if (plusMatch) {
-    return String(Number(plusMatch[1]) + Number(plusMatch[2]));
+  if (query.toLowerCase().includes("plus")) {
+    const match = query.match(/(\d+) plus (\d+)/i);
+    if (match) return String(Number(match[1]) + Number(match[2]));
   }
 
-  const multMatch = query.match(/what is (\d+) multiplied by (\d+)/i);
-  if (multMatch) {
-    return String(Number(multMatch[1]) * Number(multMatch[2]));
+  if (query.toLowerCase().includes("multiplied by")) {
+    const match = query.match(/(\d+) multiplied by (\d+)/i);
+    if (match) return String(Number(match[1]) * Number(match[2]));
   }
 
-  const subMatch = query.match(/what is (\d+) minus (\d+)/i);
-  if (subMatch) {
-    return String(Number(subMatch[1]) - Number(subMatch[2]));
+  if (query.toLowerCase().includes("minus")) {
+    const match = query.match(/(\d+) minus (\d+)/i);
+    if (match) return String(Number(match[1]) - Number(match[2]));
   }
 
-  const divMatch = query.match(/what is (\d+) divided by (\d+)/i);
-  if (divMatch) {
-    return String(Number(divMatch[1]) / Number(divMatch[2]));
+  if (query.toLowerCase().includes("divided by") && !query.toLowerCase().includes("remainder")) {
+    const match = query.match(/(\d+) divided by (\d+)/i);
+    if (match) return String(Number(match[1]) / Number(match[2]));
   }
 
-  const largestMatch = query.match(/Which of the following numbers is the largest:\s*(\d+),\s*(\d+),\s*(\d+)/i);
-  if (largestMatch) {
-    return String(Math.max(Number(largestMatch[1]), Number(largestMatch[2]), Number(largestMatch[3])));
+  if (query.toLowerCase().includes("to the power of")) {
+    const match = query.match(/(\d+) to the power of (\d+)/i);
+    if (match) return String(Math.pow(Number(match[1]), Number(match[2])));
+  }
+
+  if (query.toLowerCase().includes("square root of")) {
+    const match = query.match(/square root of (\d+)/i);
+    if (match) return String(Math.sqrt(Number(match[1])));
+  }
+
+  if (query.toLowerCase().includes("remainder")) {
+    const match = query.match(/(\d+) is divided by (\d+)/i);
+    if (match) return String(Number(match[1]) % Number(match[2]));
+  }
+
+  if (query.toLowerCase().includes("largest")) {
+    const match = query.match(/largest:\s*(\d+),\s*(\d+),\s*(\d+)/i);
+    if (match) return String(Math.max(Number(match[1]), Number(match[2]), Number(match[3])));
+  }
+
+  if (query.toLowerCase().includes("smallest")) {
+    const match = query.match(/smallest:\s*(\d+),\s*(\d+),\s*(\d+)/i);
+    if (match) return String(Math.min(Number(match[1]), Number(match[2]), Number(match[3])));
   }
 
   if (query.toLowerCase().includes("primes")) {
