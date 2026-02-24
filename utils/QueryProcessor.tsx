@@ -16,8 +16,8 @@ export default function QueryProcessor(query: string): string {
   }
 
   if (query.toLowerCase().includes("plus")) {
-    const match = query.match(/(\d+) plus (\d+)/i);
-    if (match) return String(Number(match[1]) + Number(match[2]));
+    const numbers = (query.match(/\d+/g) || []).map(Number);
+    if (numbers.length > 0) return String(numbers.reduce((sum, n) => sum + n, 0));
   }
 
   if (query.toLowerCase().includes("multiplied by")) {
