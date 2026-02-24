@@ -30,6 +30,18 @@ export default function QueryProcessor(query: string): string {
     return String(Math.max(Number(largestMatch[1]), Number(largestMatch[2]), Number(largestMatch[3])));
   }
 
+  if (query.toLowerCase().includes("primes")) {
+    const numbers = (query.match(/\d+/g) || []).map(Number);
+    const isPrime = (n: number) => {
+      if (n < 2) return false;
+      for (let i = 2; i <= Math.sqrt(n); i++) {
+        if (n % i === 0) return false;
+      }
+      return true;
+    };
+    return numbers.filter(isPrime).join(", ");
+  }
+
   if (query.toLowerCase().includes("square and a cube")) {
     const numbers = (query.match(/\d+/g) || []).map(Number);
     const result = numbers.find((n) => {
