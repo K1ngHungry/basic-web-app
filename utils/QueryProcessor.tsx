@@ -30,6 +30,11 @@ export default function QueryProcessor(query: string): string {
     return String(Number(subMatch[1]) - Number(subMatch[2]));
   }
 
+  const divMatch = query.match(/what is (\d+) divided by (\d+)/i);
+  if (divMatch) {
+    return String(Number(divMatch[1]) / Number(divMatch[2]));
+  }
+
   const largestMatch = query.match(/Which of the following numbers is the largest:\s*(\d+),\s*(\d+),\s*(\d+)/i);
   if (largestMatch) {
     return String(Math.max(Number(largestMatch[1]), Number(largestMatch[2]), Number(largestMatch[3])));
