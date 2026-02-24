@@ -81,6 +81,18 @@ export default function QueryProcessor(query: string): string {
     return numbers.filter(isPrime).join(", ");
   }
 
+  if (query.toLowerCase().includes("anagram")) {
+    const targetMatch = query.match(/anagram of (\w+)/i);
+    const candidatesMatch = query.match(/:\s*(.+)/);
+    if (targetMatch && candidatesMatch) {
+      const sort = (s: string) => s.toLowerCase().split("").sort().join("");
+      const target = sort(targetMatch[1]);
+      const candidates = candidatesMatch[1].split(",").map((w) => w.trim().replace(/\?$/, ""));
+      const result = candidates.find((w) => sort(w) === target);
+      return result || "";
+    }
+  }
+
   if (query.toLowerCase().includes("square and a cube")) {
     const numbers = (query.match(/\d+/g) || []).map(Number);
     const result = numbers.find((n) => {
