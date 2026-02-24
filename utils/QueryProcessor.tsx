@@ -21,18 +21,18 @@ export default function QueryProcessor(query: string): string {
   }
 
   if (query.toLowerCase().includes("multiplied by")) {
-    const match = query.match(/(\d+) multiplied by (\d+)/i);
-    if (match) return String(Number(match[1]) * Number(match[2]));
+    const numbers = (query.match(/\d+/g) || []).map(Number);
+    if (numbers.length > 0) return String(numbers.reduce((product, n) => product * n, 1));
   }
 
   if (query.toLowerCase().includes("minus")) {
-    const match = query.match(/(\d+) minus (\d+)/i);
-    if (match) return String(Number(match[1]) - Number(match[2]));
+    const numbers = (query.match(/\d+/g) || []).map(Number);
+    if (numbers.length > 0) return String(numbers.slice(1).reduce((diff, n) => diff - n, numbers[0]));
   }
 
   if (query.toLowerCase().includes("divided by") && !query.toLowerCase().includes("remainder")) {
-    const match = query.match(/(\d+) divided by (\d+)/i);
-    if (match) return String(Number(match[1]) / Number(match[2]));
+    const numbers = (query.match(/\d+/g) || []).map(Number);
+    if (numbers.length > 0) return String(numbers.slice(1).reduce((quot, n) => quot / n, numbers[0]));
   }
 
   if (query.toLowerCase().includes("to the power of")) {
