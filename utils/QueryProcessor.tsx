@@ -30,5 +30,15 @@ export default function QueryProcessor(query: string): string {
     return String(Math.max(Number(largestMatch[1]), Number(largestMatch[2]), Number(largestMatch[3])));
   }
 
+  if (query.toLowerCase().includes("square and a cube")) {
+    const numbers = (query.match(/\d+/g) || []).map(Number);
+    const result = numbers.find((n) => {
+      const isSquare = Math.round(Math.sqrt(n)) ** 2 === n;
+      const isCube = Math.round(Math.cbrt(n)) ** 3 === n;
+      return isSquare && isCube;
+    });
+    return result !== undefined ? String(result) : "";
+  }
+
   return "";
 }
