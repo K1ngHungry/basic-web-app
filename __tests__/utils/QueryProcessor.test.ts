@@ -31,4 +31,16 @@ describe("QueryProcessor", () => {
         const response: string = QueryProcessor(query);
         expect(response).toBe("kevindai");
     })
+
+    test('should return sum of two numbers', () => {
+        const query = "What is 62 plus 40?";
+        const response: string = QueryProcessor(query);
+        expect(response).toBe("102");
+    })
+
+    test('should return the largest of three numbers', () => {
+        const query = "Which of the following numbers is the largest: 48, 62, 94?";
+        const response: string = QueryProcessor(query);
+        expect(response).toBe("94");
+    })
 });

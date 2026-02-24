@@ -15,5 +15,15 @@ export default function QueryProcessor(query: string): string {
     return "kevindai";
   }
 
+  const plusMatch = query.match(/what is (\d+) plus (\d+)/i);
+  if (plusMatch) {
+    return String(Number(plusMatch[1]) + Number(plusMatch[2]));
+  }
+
+  const largestMatch = query.match(/largest:*?(\d+),\s*(\d+),\s*(\d+)/i);
+  if (largestMatch) {
+    return String(Math.max(Number(largestMatch[1]), Number(largestMatch[2]), Number(largestMatch[3])));
+  }
+
   return "";
 }
