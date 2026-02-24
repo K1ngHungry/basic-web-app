@@ -15,24 +15,21 @@ export default function QueryProcessor(query: string): string {
     return "kevindai";
   }
 
-  if (query.toLowerCase().includes("plus")) {
-    const numbers = (query.match(/\d+/g) || []).map(Number);
-    if (numbers.length > 0) return String(numbers.reduce((sum, n) => sum + n, 0));
-  }
-
-  if (query.toLowerCase().includes("multiplied by")) {
-    const numbers = (query.match(/\d+/g) || []).map(Number);
-    if (numbers.length > 0) return String(numbers.reduce((product, n) => product * n, 1));
-  }
-
-  if (query.toLowerCase().includes("minus")) {
-    const numbers = (query.match(/\d+/g) || []).map(Number);
-    if (numbers.length > 0) return String(numbers.slice(1).reduce((diff, n) => diff - n, numbers[0]));
-  }
-
-  if (query.toLowerCase().includes("divided by") && !query.toLowerCase().includes("remainder")) {
-    const numbers = (query.match(/\d+/g) || []).map(Number);
-    if (numbers.length > 0) return String(numbers.slice(1).reduce((quot, n) => quot / n, numbers[0]));
+  const arithmeticOps = ["plus", "minus", "multiplied by", "divided by"];
+  if (arithmeticOps.some((op) => query.toLowerCase().includes(op)) && !query.toLowerCase().includes("remainder")) {
+    const tokens = query.match(/\d+|multiplied by|divided by|plus|minus/gi) || [];
+    if (tokens.length >= 1) {
+      let result = Number(tokens[0]);
+      for (let i = 1; i + 1 < tokens.length; i += 2) {
+        const op = tokens[i].toLowerCase();
+        const operand = Number(tokens[i + 1]);
+        if (op === "plus") result += operand;
+        else if (op === "minus") result -= operand;
+        else if (op === "multiplied by") result *= operand;
+        else if (op === "divided by") result /= operand;
+      }
+      return String(result);
+    }
   }
 
   if (query.toLowerCase().includes("to the power of")) {
