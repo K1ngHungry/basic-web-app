@@ -20,7 +20,7 @@ export default function QueryProcessor(query: string): string {
     return String(Number(plusMatch[1]) + Number(plusMatch[2]));
   }
 
-  const largestMatch = query.match(/largest:*?(\d+),\s*(\d+),\s*(\d+)/i);
+  const largestMatch = query.match(/Which of the following numbers is the largest:\s*(\d+),\s*(\d+),\s*(\d+)/i);
   if (largestMatch) {
     return String(Math.max(Number(largestMatch[1]), Number(largestMatch[2]), Number(largestMatch[3])));
   }
