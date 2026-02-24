@@ -25,6 +25,11 @@ export default function QueryProcessor(query: string): string {
     return String(Number(multMatch[1]) * Number(multMatch[2]));
   }
 
+  const subMatch = query.match(/what is (\d+) minus (\d+)/i);
+  if (subMatch) {
+    return String(Number(subMatch[1]) - Number(subMatch[2]));
+  }
+
   const largestMatch = query.match(/Which of the following numbers is the largest:\s*(\d+),\s*(\d+),\s*(\d+)/i);
   if (largestMatch) {
     return String(Math.max(Number(largestMatch[1]), Number(largestMatch[2]), Number(largestMatch[3])));
